@@ -276,8 +276,8 @@ importers:
         specifier: workspace:^
         version: link:../greeting-banner
       '@colyseus/msgpackr':
-        specifier: ^1.11.2
-        version: 1.11.2
+        specifier: ^1.11.3
+        version: 1.11.3
       '@colyseus/shared-types':
         specifier: workspace:^
         version: link:../shared-types
@@ -1202,6 +1202,9 @@ packages:
 
   '@colyseus/msgpackr@1.11.2':
     resolution: {integrity: sha512-MuwPFhizFKC3zmGfy0fpo+kcnZdNdnQHFVjw81v4WXHCelDeCX8yNRVtuEm8kGlHqq7qiASLC0pu0RPqYOhxXg==}
+
+  '@colyseus/msgpackr@1.11.3':
+    resolution: {integrity: sha512-P86w/FrZWUaV7StxI7WuNg3wFlUrROSiBOrF378wyOgxS5+etcxUQMPe0OJZDEx+QUdu7QOPzsqE0Ziqwpjnug==}
 
   '@colyseus/schema@4.0.13':
     resolution: {integrity: sha512-bAlm9MFQGovAADtiSdeEoRuwENGEXhW1zJ/9NLe4HNM3PUVjpuGpo207IMcwrU9M3E1Nd6XGPNHY57rlIuYH0A==}
@@ -8301,6 +8304,10 @@ snapshots:
   '@colyseus/clock@2.0.3': {}
 
   '@colyseus/msgpackr@1.11.2':
+    optionalDependencies:
+      msgpackr-extract: 3.0.3
+
+  '@colyseus/msgpackr@1.11.3':
     optionalDependencies:
       msgpackr-extract: 3.0.3
 
