@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.17.44
+
+- Add `Server.serverless()`: prepares matchmaking + HTTP routes and returns the underlying `http.Server` **without** binding to a port — for serverless platforms that consume an exported server instead of a listening one (e.g. Vercel, whose Express/Hono WebSocket examples use `export default server`). Calling `listen()` on those platforms selects their "captured server" path, which does not invoke Express-style app handlers. Pass an `http.Server` to the transport so it can be exported:
+  ```ts
+  import { createServer } from "node:http";
+  const httpServer = createServer();
+  const gameServer = new Server({
+    transport: new WebSocketTransport({ server: httpServer }),
+    express: (app) => { app.get("/hello", (req, res) => res.json({ ok: true })); },
+  });
+  gameServer.define("my_room", MyRoom);
+  export default await gameServer.serverless(); // no listen()
+  ```
+  (On Vercel, also set `package.json` `"main"` to the entrypoint file.)
+- `serverless()` pre-reads request bodies into `req.body` so matchmaking `POST`s work when the server is consumed via `export default` (the router otherwise reads from a lazy request stream that does not drain in that mode). Added `prereadRequestBodies()` to `router/node.ts`.
+- Internal: `listen()` and `serverless()` now share a private `bindRoutes()` helper (set transport + bind matchmaking routes). `listen()` behavior is unchanged.
+
 ## 0.17.43
 
 - Fix `defineServer()` + `server.listen()` not configuring `RedisDriver` / `RedisPresence` on Colyseus Cloud. The `Server` constructor was pre-instantiating `LocalPresence` / `LocalDriver`, shadowing the cloud auto-detection in `matchMaker.setup()` (`utils/Env.ts`). Now passes `options.presence` / `options.driver` through as-is so `getDefaultPresence` / `getDefaultDriver` can pick Redis when running on Cloud.
